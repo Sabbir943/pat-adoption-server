@@ -1,4 +1,4 @@
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 const express=require('express');
 const cors=require('cors');
@@ -22,7 +22,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     
-    await client.connect();
+    // await client.connect();
     const db=client.db('pet-adoption');
     const patCollection=db.collection('pet-collection');
 
@@ -41,8 +41,16 @@ async function run() {
       const result=await patCollection.find().toArray();
       res.json(result);
     })
+
+    app.get('/addPets/:id',async(req,res)=>{
+     const {id}=req.params;
+     const result= await patCollection.findOne({
+      _id:new ObjectId(id)
+     })
+     res.json(result);
+    })
     
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
    
