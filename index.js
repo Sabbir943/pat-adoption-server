@@ -25,22 +25,37 @@ async function run() {
     // await client.connect();
     const db=client.db('pet-adoption');
     const patCollection=db.collection('pet-collection');
+    const myRequest=db.collection("myRequest");
 
-    app.get('/pets',async(req,res)=>{
-        const result=await patCollection.find().toArray();
-        res.json(result);
-    })
-
+   
+    
     app.post('/addPets',async(req,res)=>{
       const petData=req.body;
       const result= await patCollection.insertOne(petData);
       res.json(result);
     })
-
-    app.get('/addPets',async(req,res)=>{
+     app.get('/addPets',async(req,res)=>{
       const result=await patCollection.find().toArray();
       res.json(result);
     })
+    // created api for deleted
+
+    app.delete('/addPets/:id',async(req,res)=>{
+      const {id}=req.params
+      const result = await patCollection.deleteOne({
+        _id:new ObjectId(id)
+      })
+      res.json(result);
+    })
+
+    //for my request pet 
+    app.post('/myRequest',async(req,res)=>{
+      const petData=req.body;
+      const result=await myRequest.insertOne(petData);
+      res.json(result);
+    })
+
+   
 
     app.get('/addPets/:id',async(req,res)=>{
      const {id}=req.params;
