@@ -62,7 +62,7 @@ async function run() {
  
 
     // ADD PET
-    app.post('/addPets', verifyToken ,async (req, res) => {
+    app.post('/addPets', async (req, res) => {
       const petData = {
         ...req.body,
         status: 'available'
@@ -76,7 +76,7 @@ async function run() {
 
 
     // GET SINGLE USER LISTINGS
-    app.get('/myListing/:email',verifyToken ,async (req, res) => {
+    app.get('/myListing/:email',async (req, res) => {
       const result = await patCollection.find({
         ownerEmail: req.params.email
       }).toArray();
@@ -85,7 +85,7 @@ async function run() {
     });
 
     // GET SINGLE PET
-    app.get('/pet/:id', verifyToken, async (req, res) => {
+    app.get('/pet/:id', async (req, res) => {
       const result = await patCollection.findOne({
         _id: new ObjectId(req.params.id)
       });
@@ -94,7 +94,7 @@ async function run() {
     });
 
     // UPDATE PET
-    app.patch('/pet/:id', verifyToken,async (req, res) => {
+    app.patch('/pet/:id', async (req, res) => {
       const result = await patCollection.updateOne(
         { _id: new ObjectId(req.params.id) },
         { $set: req.body }
@@ -104,7 +104,7 @@ async function run() {
     });
 
     // DELETE PET
-    app.delete('/pet/:id', verifyToken, async (req, res) => {
+    app.delete('/pet/:id',  async (req, res) => {
       const result = await patCollection.deleteOne({
         _id: new ObjectId(req.params.id)
       });
@@ -115,7 +115,7 @@ async function run() {
     /* -------------------- ADOPTION REQUEST -------------------- */
 
     // CREATE REQUEST
-    app.post('/request', verifyToken,async (req, res) => {
+    app.post('/request', async (req, res) => {
       const body = req.body;
 
       const pet = await patCollection.findOne({
@@ -150,7 +150,7 @@ async function run() {
     });
 
     // GET MY REQUESTS (USER)
-    app.get('/myRequest/:email', verifyToken ,async (req, res) => {
+    app.get('/myRequest/:email',async (req, res) => {
       const result = await requestCollection.find({
         userEmail: req.params.email
       }).toArray();
@@ -159,7 +159,7 @@ async function run() {
     });
 
     // CANCEL REQUEST
-    app.delete('/myRequest/:id',verifyToken ,async (req, res) => {
+    app.delete('/myRequest/:id',async (req, res) => {
       const result = await requestCollection.deleteOne({
         _id: new ObjectId(req.params.id)
       });
@@ -179,7 +179,7 @@ async function run() {
 
 
     // APPROVE REQUEST
-    app.patch('/approve/:id',verifyToken ,async (req, res) => {
+    app.patch('/approve/:id',async (req, res) => {
 
       const request = await requestCollection.findOne({
         _id: new ObjectId(req.params.id)
@@ -211,7 +211,7 @@ async function run() {
     });
 
     // REJECT REQUEST
-    app.patch('/reject/:id',verifyToken ,async (req, res) => {
+    app.patch('/reject/:id',async (req, res) => {
 
       const result = await requestCollection.updateOne(
         { _id: new ObjectId(req.params.id) },
