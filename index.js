@@ -10,8 +10,8 @@ dotenv.config();
 app.use(express.json());
 app.use(cors());
 
-const PORT = process.env.SERVER_PORT;
-const uri = process.env.MONGODB_URI;
+const PORT=process.env.SERVER_PORT;
+const uri=process.env.MONGODB_URI;
 
 const client = new MongoClient(uri, {
   serverApi: {
@@ -20,36 +20,36 @@ const client = new MongoClient(uri, {
     deprecationErrors: true,
   }
 });
-const JWKS = createRemoteJWKSet(
-  new URL(`${process.env.CLIENT_URL}/api/auth/jwks`)
-)
-const verifyToken = async (req, res, next) => {
-  const authHeader = req?.headers.authorization;
-  if (!authHeader) {
-    return res.status(401).json({
-      message: "Unauthorized"
-    })
-  }
-  const token = authHeader.split(" ")[1];
-  if (!token) {
-    return res.status(401).json({
-      message: "Unauthorized"
-    })
-  }
-  try {
-    const { payload } = await jwtVerify(token, JWKS);
-    req.user = payload;
-    next();
-  }
-  catch (e) {
-    return res.status(401).json({
-      message: "unauthorized"
-    })
-  }
+// const JWKS = createRemoteJWKSet(
+//   new URL(`${process.env.CLIENT_URL}/api/auth/jwks`)
+// )
+// const verifyToken = async (req, res, next) => {
+//   const authHeader = req?.headers.authorization;
+//   if (!authHeader) {
+//     return res.status(401).json({
+//       message: "Unauthorized"
+//     })
+//   }
+//   const token = authHeader.split(" ")[1];
+//   if (!token) {
+//     return res.status(401).json({
+//       message: "Unauthorized"
+//     })
+//   }
+//   try {
+//     const { payload } = await jwtVerify(token, JWKS);
+//     req.user = payload;
+//     next();
+//   }
+//   catch (e) {
+//     return res.status(401).json({
+//       message: "unauthorized"
+//     })
+//   }
 
 
 
-}
+// }
 
 async function run() {
   try {
